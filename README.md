@@ -50,12 +50,27 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 http://127.0.0.1:8000/api/health
 ```
 
+聊天接口：
+
+```text
+POST http://127.0.0.1:8000/chat
+```
+
+请求示例：
+
+```json
+{
+  "question": "村集体资金支出怎么审批？",
+  "platform": "pc"
+}
+```
+
 ### 2. 前端
 
 ```powershell
 cd D:\sanzi-assistant\frontend
-npm install
-npm run dev
+npm.cmd install
+npm.cmd run dev
 ```
 
 前端默认访问：
@@ -63,6 +78,10 @@ npm run dev
 ```text
 http://127.0.0.1:5173
 ```
+
+前端默认通过 `VITE_API_BASE_URL=http://127.0.0.1:8000` 调用后端 `/chat` 接口。
+
+如果 PowerShell 提示 `npm.ps1` 未签名，请使用 `npm.cmd`，这是 Windows 执行策略限制，不是项目依赖错误。
 
 ## LLM 配置
 
@@ -84,4 +103,3 @@ OPENAI_MODEL=gpt-4.1-mini
 - 成员 D：`feat/knowledge-graph`，知识库整合与图谱构建
 
 详细规范见 [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)。
-

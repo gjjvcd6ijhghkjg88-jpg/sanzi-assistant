@@ -11,7 +11,7 @@
 ```mermaid
 flowchart LR
   U["用户输入问题"] --> FE["React 问答界面"]
-  FE --> API["FastAPI /api/qa/ask"]
+  FE --> API["FastAPI /chat"]
   API --> KB["知识库检索"]
   KB --> LLM["LLM 生成或本地兜底回答"]
   LLM --> API
@@ -41,7 +41,7 @@ flowchart LR
 前端调用：
 
 ```http
-POST /api/qa/ask
+POST /chat
 ```
 
 请求字段：
@@ -57,3 +57,4 @@ POST /api/qa/ask
 - `suggestions`：推荐追问。
 - `trace_id`：排查问题用的链路 ID。
 
+兼容说明：后端仍保留 `POST /api/qa/ask`，但前端主链路统一调用 `POST /chat`。

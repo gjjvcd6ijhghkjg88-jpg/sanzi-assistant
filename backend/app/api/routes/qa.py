@@ -11,9 +11,8 @@ from app.services.llm_service import answer_question
 router = APIRouter(prefix="/qa", tags=["qa"])
 
 
-@router.post("/ask", response_model=AskResponse)
-async def ask_question(payload: AskRequest) -> AskResponse:
-    """根据用户问题返回简明、带来源和追问建议的业务回答。"""
+async def create_ask_response(payload: AskRequest) -> AskResponse:
+    """复用问答处理流程，供 /api/qa/ask 和 /chat 两个入口调用。"""
     trace_id = uuid4().hex
     matched_sources = knowledge_base.search(payload.question, limit=3)
     answer, suggestions, mode = await answer_question(payload, matched_sources)
@@ -26,3 +25,8 @@ async def ask_question(payload: AskRequest) -> AskResponse:
         mode=mode,
     )
 
+
+@router.post("/ask", response_model=AskResponse)
+async def ask_question(payload: AskRequest) -> AskResponse:
+    """根据用户问题返回简明、带来源和追问建议的业务回答。"""
+    return await create_ask_response(payload)

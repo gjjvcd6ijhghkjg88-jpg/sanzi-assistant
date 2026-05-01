@@ -1,10 +1,10 @@
-# 作用：声明后端运行、LLM 接入和测试所需的 Python 依赖；版本范围兼容 Python 3.14。
+# 作用：声明后端运行、LLM 接入和测试所需的 Python 依赖；当前版本已在 Python 3.14 验证。
 
-fastapi>=0.136.0,<1.0.0
-uvicorn[standard]>=0.46.0,<1.0.0
-pydantic>=2.13.0,<3.0.0
-pydantic-settings>=2.14.0,<3.0.0
-python-dotenv>=1.2.0,<2.0.0
-openai>=2.33.0,<3.0.0
-pytest>=9.0.0,<10.0.0
-httpx>=0.28.0,<1.0.0
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+pydantic==2.13.3
+pydantic-settings==2.14.0
+python-dotenv==1.2.2
+openai==2.33.0
+pytest==9.0.3
+httpx==0.28.1
