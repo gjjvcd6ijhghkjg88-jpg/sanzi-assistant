@@ -1,0 +1,32 @@
+"""作用：创建 FastAPI 应用实例，配置跨域，并挂载健康检查和问答路由。"""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.routes import health, qa
+from app.core.config import settings
+
+
+def create_app() -> FastAPI:
+    """创建应用工厂，测试和生产启动都复用同一份配置。"""
+    app = FastAPI(
+        title=settings.app_name,
+        version="0.1.0",
+        description="三资管理智能问答助手后端 API",
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.allowed_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(health.router, prefix="/api")
+    app.include_router(qa.router, prefix="/api")
+    return app
+
+
+app = create_app()
+

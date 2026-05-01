@@ -1,0 +1,403 @@
+/* 作用：定义全局视觉风格、问答布局和 PC/移动端响应式适配。 */
+
+:root {
+  font-family: Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  color: #17211b;
+  background: #f4f7f2;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: 20px;
+  background:
+    linear-gradient(135deg, rgba(39, 101, 68, 0.12), transparent 32%),
+    linear-gradient(315deg, rgba(197, 90, 17, 0.1), transparent 28%),
+    #f4f7f2;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto 18px;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #276544;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  color: #5d6c61;
+}
+
+.platform-switch {
+  display: flex;
+  padding: 4px;
+  border: 1px solid #cbd8cc;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.platform-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  color: #4e5c52;
+  background: transparent;
+}
+
+.platform-switch button.active {
+  color: #ffffff;
+  background: #276544;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.chat-panel,
+.source-panel {
+  min-height: calc(100vh - 126px);
+  border: 1px solid #d8e0d8;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 40px rgba(22, 44, 29, 0.08);
+}
+
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px;
+}
+
+.message {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.message.user {
+  grid-template-columns: minmax(0, 1fr) 52px;
+}
+
+.message.user .message-label {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.message.user .message-bubble {
+  grid-column: 1;
+  justify-self: end;
+  color: #ffffff;
+  background: #276544;
+}
+
+.message-label {
+  width: 44px;
+  height: 32px;
+  padding-top: 6px;
+  color: #6a786e;
+  font-size: 14px;
+}
+
+.message-bubble {
+  width: fit-content;
+  max-width: 720px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  color: #1f2b23;
+  background: #eef4ec;
+  line-height: 1.7;
+}
+
+.message-bubble p {
+  margin: 0 0 8px;
+}
+
+.message-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.mode-badge {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #6c3b07;
+  background: #fff0d9;
+  font-size: 13px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.suggestions button {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid #b7c8b8;
+  border-radius: 6px;
+  color: #276544;
+  background: #ffffff;
+}
+
+.loading-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-banner {
+  margin: 0 22px 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #8a1f11;
+  background: #ffe8e3;
+}
+
+.composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid #d8e0d8;
+  background: #ffffff;
+}
+
+.composer textarea {
+  width: 100%;
+  min-height: 48px;
+  max-height: 120px;
+  resize: vertical;
+  border: 1px solid #c8d5c9;
+  border-radius: 8px;
+  padding: 12px;
+  color: #17211b;
+  outline: none;
+}
+
+.composer textarea:focus {
+  border-color: #276544;
+  box-shadow: 0 0 0 3px rgba(39, 101, 68, 0.14);
+}
+
+.composer button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #c55a11;
+}
+
+.composer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.source-panel {
+  padding: 18px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.panel-title h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.empty-source {
+  display: grid;
+  gap: 10px;
+  place-items: center;
+  min-height: 220px;
+  padding: 20px;
+  color: #66736a;
+  text-align: center;
+  border: 1px dashed #bfccbf;
+  border-radius: 8px;
+  background: #f8faf7;
+}
+
+.empty-source p {
+  margin: 0;
+}
+
+.source-list {
+  display: grid;
+  gap: 12px;
+}
+
+.source-card {
+  padding: 14px;
+  border: 1px solid #d7e0d6;
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.source-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #6b776d;
+  font-size: 13px;
+}
+
+.source-meta strong {
+  color: #276544;
+}
+
+.source-card h3 {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.source-card p {
+  margin: 0;
+  color: #48554b;
+  line-height: 1.65;
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .brand h1 {
+    font-size: 22px;
+  }
+
+  .platform-switch {
+    width: 100%;
+  }
+
+  .platform-switch button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-panel,
+  .source-panel {
+    min-height: auto;
+  }
+
+  .message-list {
+    max-height: calc(100vh - 270px);
+    min-height: 380px;
+    padding: 14px;
+  }
+
+  .message,
+  .message.user {
+    grid-template-columns: 1fr;
+  }
+
+  .message-label,
+  .message.user .message-label,
+  .message.user .message-bubble {
+    grid-column: 1;
+  }
+
+  .message-label {
+    width: auto;
+    height: auto;
+    padding-top: 0;
+  }
+
+  .message-bubble {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .source-panel {
+    order: 2;
+  }
+}
+
