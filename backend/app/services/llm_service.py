@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
+from collections.abc import AsyncIterator
+
 from app.core.config import settings
 from app.schemas import AskRequest, Source
 
@@ -88,4 +91,71 @@ async def answer_question(
         return answer.strip(), suggestions, "llm"
     except Exception:
         return _local_answer(payload, sources)
+
+
+_STREAM_CHUNK_SIZE = 24
+_STREAM_INTERVAL_SECONDS = 0.04
+
+
+async def _stream_local(
+    payload: AskRequest,
+    sources: list[Source],
+) -> AsyncIterator[tuple[str, object]]:
+    """把本地兜底回答按字符分片成流，模拟 LLM token 输出。"""
+    answer, suggestions, mode = _local_answer(payload, sources)
+    for index in range(0, len(answer), _STREAM_CHUNK_SIZE):
+        yield "delta", answer[index : index + _STREAM_CHUNK_SIZE]
+        await asyncio.sleep(_STREAM_INTERVAL_SECONDS)
+    yield "suggestions", suggestions
+    yield "mode", mode
+
+
+async def _stream_llm(
+    payload: AskRequest,
+    sources: list[Source],
+) -> AsyncIterator[tuple[str, object]]:
+    """调用 OpenAI 流式接口，逐 token 产出 delta。"""
+    from openai import AsyncOpenAI
+
+    client = AsyncOpenAI(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+    )
+    stream = await client.chat.completions.create(
+        model=settings.openai_model,
+        messages=[
+            {"role": "system", "content": _build_system_prompt(payload.platform.value)},
+            {"role": "user", "content": _build_user_prompt(payload.question, sources)},
+        ],
+        temperature=0.2,
+        stream=True,
+    )
+    async for chunk in stream:
+        delta = chunk.choices[0].delta.content if chunk.choices else None
+        if delta:
+            yield "delta", delta
+    yield "suggestions", [
+        "能否给我一个办理清单？",
+        "这个流程有哪些常见错误？",
+        "移动端录入时要注意什么？",
+    ]
+    yield "mode", "llm"
+
+
+async def stream_answer(
+    payload: AskRequest,
+    sources: list[Source],
+) -> AsyncIterator[tuple[str, object]]:
+    """统一的流式入口：无 Key 或失败时回退到本地分片流。"""
+    if not settings.openai_api_key:
+        async for event in _stream_local(payload, sources):
+            yield event
+        return
+
+    try:
+        async for event in _stream_llm(payload, sources):
+            yield event
+    except Exception:
+        async for event in _stream_local(payload, sources):
+            yield event
 
