@@ -52,7 +52,4 @@ class KnowledgeBase:
         ]
 
 
-knowledge_base = KnowledgeBase(
-    Path(__file__).resolve().parents[2] / "data" / "knowledge_base.json"
-)
-
+knowledge_base = KnowledgeBase(Path(__file__).resolve().parents[2] / "data" / "knowledge_base.json")

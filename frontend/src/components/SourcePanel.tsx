@@ -39,4 +39,3 @@ export function SourcePanel({ message }: SourcePanelProps) {
     </aside>
   );
 }
-

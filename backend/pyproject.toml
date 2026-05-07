@@ -1,0 +1,57 @@
+# 作用：集中声明后端 Python 工程规范（ruff + black + mypy + pytest）。
+# 与 requirements.txt 互补：依赖清单仍走 requirements.txt，工具配置集中在此处。
+
+[project]
+name = "sanzi-assistant-backend"
+version = "0.1.0"
+description = "三资管理智能问答助手后端服务"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "__pycache__", "data"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",   # 行长交给 black 处理
+    "B008",   # FastAPI Depends/Field 默认值属常用模式
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "scripts"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+extend-exclude = '''
+/(
+    \.venv
+  | __pycache__
+)/
+'''
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+ignore_missing_imports = true
+exclude = "(\\.venv|tests|scripts)"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

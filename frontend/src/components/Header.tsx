@@ -44,4 +44,3 @@ export function Header({ platform, onPlatformChange }: HeaderProps) {
     </header>
   );
 }
-

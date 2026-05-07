@@ -16,12 +16,12 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import AsyncIterator
-from uuid import uuid4
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
 from app.api.routes.qa import create_ask_response
+from app.core.logging import get_trace_id
 from app.schemas import AskRequest, AskResponse, ErrorCode, ErrorResponse
 from app.services.knowledge_base import knowledge_base
 from app.services.llm_service import stream_answer
@@ -39,7 +39,7 @@ _ERROR_RESPONSES: dict[int | str, dict] = {
 def _sse(event: str, data: object) -> bytes:
     """把事件名 + JSON 数据编码成 SSE 行。"""
     payload = json.dumps(data, ensure_ascii=False)
-    return f"event: {event}\ndata: {payload}\n\n".encode("utf-8")
+    return f"event: {event}\ndata: {payload}\n\n".encode()
 
 
 @router.post("/chat", response_model=AskResponse, responses=_ERROR_RESPONSES)
@@ -60,7 +60,7 @@ async def chat(payload: AskRequest) -> AskResponse:
 )
 async def chat_stream(payload: AskRequest) -> StreamingResponse:
     """以 SSE 方式流式返回回答，配合前端打字机效果。"""
-    trace_id = uuid4().hex
+    trace_id = get_trace_id()
 
     async def event_source() -> AsyncIterator[bytes]:
         try:
@@ -100,6 +100,5 @@ async def chat_stream(payload: AskRequest) -> StreamingResponse:
             "Cache-Control": "no-cache, no-transform",
             "X-Accel-Buffering": "no",
             "Connection": "keep-alive",
-            "X-Trace-Id": trace_id,
         },
     )

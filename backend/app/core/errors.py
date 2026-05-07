@@ -3,20 +3,15 @@
 from __future__ import annotations
 
 import logging
-from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.core.logging import get_trace_id
 from app.schemas import ErrorCode, ErrorResponse
 
 logger = logging.getLogger(__name__)
-
-
-def _trace_id(request: Request) -> str:
-    """优先使用请求头中的 X-Trace-Id，否则生成新的。"""
-    return request.headers.get("x-trace-id") or uuid4().hex
 
 
 def _build(code: ErrorCode, message: str, trace_id: str, details: dict | None = None) -> dict:
@@ -34,8 +29,11 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
-        trace_id = _trace_id(request)
-        logger.warning("validation_error trace_id=%s errors=%s", trace_id, exc.errors())
+        trace_id = get_trace_id()
+        logger.warning(
+            "validation_error",
+            extra={"errors": exc.errors(), "path": request.url.path},
+        )
         return JSONResponse(
             status_code=422,
             content=_build(
@@ -48,7 +46,7 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
-        trace_id = _trace_id(request)
+        trace_id = get_trace_id()
         code = ErrorCode.not_found if exc.status_code == 404 else ErrorCode.internal_error
         message = str(exc.detail) if exc.detail else "请求处理失败。"
         return JSONResponse(
@@ -58,8 +56,8 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def unhandled_handler(request: Request, exc: Exception) -> JSONResponse:
-        trace_id = _trace_id(request)
-        logger.exception("unhandled_error trace_id=%s", trace_id)
+        trace_id = get_trace_id()
+        logger.exception("unhandled_error", extra={"path": request.url.path})
         return JSONResponse(
             status_code=500,
             content=_build(

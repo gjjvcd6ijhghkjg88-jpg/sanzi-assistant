@@ -1,7 +1,7 @@
 /* 作用：定义全局视觉风格、问答布局和 PC/移动端响应式适配。 */
 
 :root {
-  font-family: Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  font-family: Inter, 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
   color: #17211b;
   background: #f4f7f2;
   font-synthesis: none;
@@ -30,10 +30,8 @@ button {
 .app-shell {
   min-height: 100vh;
   padding: 20px;
-  background:
-    linear-gradient(135deg, rgba(39, 101, 68, 0.12), transparent 32%),
-    linear-gradient(315deg, rgba(197, 90, 17, 0.1), transparent 28%),
-    #f4f7f2;
+  background: linear-gradient(135deg, rgba(39, 101, 68, 0.12), transparent 32%),
+    linear-gradient(315deg, rgba(197, 90, 17, 0.1), transparent 28%), #f4f7f2;
 }
 
 .app-header {
@@ -400,4 +398,3 @@ button {
     order: 2;
   }
 }
-

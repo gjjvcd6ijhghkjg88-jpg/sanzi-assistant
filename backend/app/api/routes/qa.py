@@ -1,9 +1,8 @@
 """作用：提供智能问答接口，串联知识库检索和 LLM/本地兜底回答生成。"""
 
-from uuid import uuid4
-
 from fastapi import APIRouter
 
+from app.core.logging import get_trace_id
 from app.schemas import AskRequest, AskResponse, ErrorResponse
 from app.services.knowledge_base import knowledge_base
 from app.services.llm_service import answer_question
@@ -18,7 +17,7 @@ _ERROR_RESPONSES: dict[int | str, dict] = {
 
 async def create_ask_response(payload: AskRequest) -> AskResponse:
     """复用问答处理流程，供 /api/qa/ask 和 /chat 两个入口调用。"""
-    trace_id = uuid4().hex
+    trace_id = get_trace_id()
     matched_sources = knowledge_base.search(payload.question, limit=3)
     answer, suggestions, mode = await answer_question(payload, matched_sources)
 

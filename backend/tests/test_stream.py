@@ -12,9 +12,9 @@ def _parse_sse(raw: str) -> list[tuple[str, str]]:
     event_name = ""
     for line in raw.splitlines():
         if line.startswith("event: "):
-            event_name = line[len("event: "):].strip()
+            event_name = line[len("event: ") :].strip()
         elif line.startswith("data: "):
-            events.append((event_name, line[len("data: "):]))
+            events.append((event_name, line[len("data: ") :]))
     return events
 
 

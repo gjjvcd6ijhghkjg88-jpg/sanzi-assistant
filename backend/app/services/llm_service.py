@@ -22,8 +22,7 @@ def _build_system_prompt(platform: str) -> str:
 def _build_user_prompt(question: str, sources: list[Source]) -> str:
     """把用户问题和检索到的资料拼成模型输入。"""
     source_text = "\n".join(
-        f"[{source.id}] {source.title}（{source.category}）：{source.excerpt}"
-        for source in sources
+        f"[{source.id}] {source.title}（{source.category}）：{source.excerpt}" for source in sources
     )
     return f"用户问题：{question}\n\n可参考资料：\n{source_text}"
 
@@ -134,11 +133,14 @@ async def _stream_llm(
         delta = chunk.choices[0].delta.content if chunk.choices else None
         if delta:
             yield "delta", delta
-    yield "suggestions", [
-        "能否给我一个办理清单？",
-        "这个流程有哪些常见错误？",
-        "移动端录入时要注意什么？",
-    ]
+    yield (
+        "suggestions",
+        [
+            "能否给我一个办理清单？",
+            "这个流程有哪些常见错误？",
+            "移动端录入时要注意什么？",
+        ],
+    )
     yield "mode", "llm"
 
 
@@ -158,4 +160,3 @@ async def stream_answer(
     except Exception:
         async for event in _stream_local(payload, sources):
             yield event
-

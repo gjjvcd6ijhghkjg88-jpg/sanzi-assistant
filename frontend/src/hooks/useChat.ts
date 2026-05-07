@@ -75,4 +75,3 @@ export function useChat(platform: Platform) {
     submit,
   };
 }
-

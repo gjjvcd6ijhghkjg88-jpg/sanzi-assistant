@@ -1,6 +1,7 @@
 // 作用：渲染聊天消息、输入框、发送按钮和推荐追问入口。
 
-import { FormEvent, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { Loader2, SendHorizontal } from 'lucide-react';
 import type { ChatMessage } from '../types';
 
@@ -73,4 +74,3 @@ export function ChatPanel({ messages, isLoading, error, onSubmit }: ChatPanelPro
     </section>
   );
 }
-

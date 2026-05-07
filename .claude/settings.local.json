@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Test-Path D:\\\\sanzi-assistant\\\\docs\\\\openapi.json; \\(Get-Item D:\\\\sanzi-assistant\\\\docs\\\\openapi.json\\).Length)"
+      "PowerShell(Test-Path D:\\\\sanzi-assistant\\\\docs\\\\openapi.json; \\(Get-Item D:\\\\sanzi-assistant\\\\docs\\\\openapi.json\\).Length)",
+      "PowerShell(New-Item *)"
     ]
   }
 }

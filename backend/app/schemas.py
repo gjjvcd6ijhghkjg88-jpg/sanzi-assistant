@@ -55,5 +55,6 @@ class ErrorResponse(BaseModel):
     code: ErrorCode = Field(..., description="机器可读错误码")
     message: str = Field(..., description="面向用户的中文提示")
     trace_id: str = Field(..., description="链路 ID，用于排障")
-    details: dict[str, Any] | None = Field(default=None, description="可选的附加字段，如校验错误明细")
-
+    details: dict[str, Any] | None = Field(
+        default=None, description="可选的附加字段，如校验错误明细"
+    )

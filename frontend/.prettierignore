@@ -1,0 +1,5 @@
+# 作用：Prettier 忽略清单，避免格式化生成文件和构建产物。
+dist
+node_modules
+src/types/api.d.ts
+*.log

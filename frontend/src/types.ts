@@ -33,11 +33,7 @@ export type ChatMessage = {
   mode?: AskResponse['mode'];
 };
 
-export type ErrorCode =
-  | 'validation_error'
-  | 'not_found'
-  | 'upstream_error'
-  | 'internal_error';
+export type ErrorCode = 'validation_error' | 'not_found' | 'upstream_error' | 'internal_error';
 
 export type ErrorPayload = {
   code: ErrorCode;

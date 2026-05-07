@@ -6,16 +6,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import chat, health, qa
 from app.core.config import settings
 from app.core.errors import register_exception_handlers
+from app.core.logging import TraceIdMiddleware, configure_logging
 
 
 def create_app() -> FastAPI:
     """创建应用工厂，测试和生产启动都复用同一份配置。"""
+    configure_logging()
+
     app = FastAPI(
         title=settings.app_name,
         version="0.1.0",
         description="三资管理智能问答助手后端 API",
     )
 
+    app.add_middleware(TraceIdMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.allowed_origins,
